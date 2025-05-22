@@ -2,7 +2,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgresql
-  namespace: odoo
+  labels:
+    app: postgresql
 spec:
   serviceName: postgresql
   replicas: 1
@@ -17,28 +18,21 @@ spec:
       containers:
       - name: postgresql
         image: postgres:13
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-secrets
-              key: postgres-user
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-secrets
-              key: postgres-password
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-secrets
-              key: postgres-db
+        envFrom:
+        - secretRef:
+            name: postgresql-credentials
         ports:
         - containerPort: 5432
-          name: postgresql
         volumeMounts:
         - name: postgresql-data
           mountPath: /var/lib/postgresql/data
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "300m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
   volumeClaimTemplates:
   - metadata:
       name: postgresql-data

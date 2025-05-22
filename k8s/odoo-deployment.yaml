@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: odoo
-  namespace: odoo
   labels:
     app: odoo
-    component: frontend
 spec:
   replicas: 1
   selector:
@@ -15,50 +13,61 @@ spec:
     metadata:
       labels:
         app: odoo
-        component: frontend
     spec:
       containers:
       - name: odoo
         image: odoo:16.0
         ports:
         - containerPort: 8069
-          name: http
-        - containerPort: 8072
-          name: longpolling
+          name: odoo
+        envFrom:
+        - secretRef:
+            name: postgresql-credentials
         env:
         - name: HOST
-          value: postgresql
+          value: "postgresql"
         - name: USER
-          value: odoo
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-credentials
+              key: POSTGRES_USER
         - name: PASSWORD
-          value: odoo
-        - name: ADMIN_PASSWD
-          value: odoo
-        - name: DB_PORT
-          value: "5432"
-        - name: DB_SSLMODE
-          value: "prefer"
-        - name: PROXY_MODE
-          value: "True"
-        - name: WITHOUT_DEMO
-          value: "True"
-        - name: WORKERS
-          value: "2"
-        - name: MAX_CRON_THREADS
-          value: "1"
-        - name: LIMIT_MEMORY_SOFT
-          value: 2147483648
-        - name: LIMIT_MEMORY_HARD
-          value: 2684354560
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-credentials
+              key: POSTGRES_PASSWORD
         volumeMounts:
         - name: odoo-data
           mountPath: /var/lib/odoo
         - name: odoo-config
           mountPath: /etc/odoo/odoo.conf
           subPath: odoo.conf
+        - name: odoo-extra-addons
+          mountPath: /mnt/extra-addons
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1"
       volumes:
       - name: odoo-data
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: odoo-data
       - name: odoo-config
         configMap:
           name: odoo-config
+      - name: odoo-extra-addons
+        emptyDir: {}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: odoo-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
