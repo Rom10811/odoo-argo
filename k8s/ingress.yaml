@@ -26,15 +26,6 @@ metadata:
       proxy_set_header X-Forwarded-Host $http_host;
       proxy_set_header X-Forwarded-Port $server_port;
       proxy_set_header X-Real-IP $remote_addr;
-    # Configuration du LoadBalancer
-    load-balancer.hetzner.cloud/name: odoo-lb
-    load-balancer.hetzner.cloud/location: nbg1  # Choisissez votre région (nbg1, fsn1, hel1)
-    load-balancer.hetzner.cloud/use-private-ip: "true"
-    load-balancer.hetzner.cloud/disable-private-ingress: "true"
-    load-balancer.hetzner.cloud/health-check-interval: "15"
-    load-balancer.hetzner.cloud/health-check-timeout: "10"
-    load-balancer.hetzner.cloud/health-check-retries: "3"
-    load-balancer.hetzner.cloud/health-check-http-status-codes: "200-399"
 spec:
   ingressClassName: nginx
   rules:
