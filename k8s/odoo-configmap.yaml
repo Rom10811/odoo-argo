@@ -20,10 +20,6 @@ data:
     proxy_mode = True
     x_sendfile = True
     
-    ; URL de base pour les liens générés
-    web.base.url = http://VOTRE_IP_PUBLIQUE:30080
-    web.base.url.freeze = False
-    
     ; Paramètres de performance
     workers = 2
     max_cron_threads = 1
