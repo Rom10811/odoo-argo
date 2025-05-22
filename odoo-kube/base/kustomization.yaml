@@ -12,7 +12,7 @@ resources:
   - odoo/configmap.yaml
   - networking/ingress.yaml
 
-commonLabels:
+labels:
   app: odoo
   version: "16.0"
 
