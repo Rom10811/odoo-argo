@@ -28,20 +28,11 @@ spec:
         - name: HOST
           value: postgresql
         - name: USER
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-secrets
-              key: postgres-user
+          value: odoo
         - name: PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: postgresql-secrets
-              key: postgres-password
+          value: odoo
         - name: ADMIN_PASSWD
-          valueFrom:
-            secretKeyRef:
-              name: odoo-secrets
-              key: admin-password
+          value: odoo
         volumeMounts:
         - name: odoo-data
           mountPath: /var/lib/odoo
