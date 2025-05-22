@@ -16,7 +16,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: odoo.local  # Remplacez par votre domaine
+  - host: odoo.duciel.cloud  # Remplacez par votre domaine
     http:
       paths:
       - path: /
@@ -25,4 +25,4 @@ spec:
           service:
             name: odoo
             port:
-              number: 80
+              number: 8069
