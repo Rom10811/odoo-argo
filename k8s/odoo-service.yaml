@@ -6,14 +6,17 @@ metadata:
   labels:
     app: odoo
 spec:
+  type: NodePort
   ports:
   - name: http
     port: 80
     targetPort: 8069
+    nodePort: 30080
     protocol: TCP
   - name: longpolling
     port: 8072
+    targetPort: 8072
+    nodePort: 30081
     protocol: TCP
   selector:
     app: odoo
-  type: ClusterIP

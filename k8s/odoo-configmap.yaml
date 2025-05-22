@@ -20,15 +20,19 @@ data:
     proxy_mode = True
     x_sendfile = True
     
+    ; URL de base pour les liens générés
+    web.base.url = http://VOTRE_IP_PUBLIQUE:30080
+    web.base.url.freeze = False
+    
     ; Paramètres de performance
-    workers = 4
+    workers = 2
     max_cron_threads = 1
     limit_memory_soft = 2147483648
     limit_memory_hard = 2684354560
     
-    ; Paramètres d'email
+    ; Paramètres d'email (à configurer selon vos besoins)
     email_from = odoo@duciel.cloud
-    smtp_server = smtp
+    smtp_server = False
     smtp_port = 25
     smtp_ssl = False
     smtp_user = False
@@ -37,3 +41,9 @@ data:
     ; Paramètres de débogage
     log_level = info
     logfile = /var/log/odoo/odoo-server.log
+    
+    ; Désactiver les démos
+    without_demo = True
+    
+    ; Configuration du proxy
+    proxy_mode = True
