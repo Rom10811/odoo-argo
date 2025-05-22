@@ -130,26 +130,6 @@ spec:
           mountPath: /var/lib/odoo
         - name: odoo-config
           mountPath: /etc/odoo
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "300m"
-          limits:
-            memory: "1Gi"
-            cpu: "1000m"
-        readinessProbe:
-          httpGet:
-            path: /web/database/selector
-            port: 8069
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          timeoutSeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /web/database/selector
-            port: 8069
-          initialDelaySeconds: 60
-          periodSeconds: 20
       volumes:
       - name: odoo-data
         persistentVolumeClaim:
