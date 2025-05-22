@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+  labels:
+    app: odoo
+    component: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      labels:
+        app: odoo
+        component: frontend
+    spec:
+      containers:
+      - name: odoo
+        image: odoo:16.0
+        ports:
+        - containerPort: 8069
+          name: http
+        - containerPort: 8072
+          name: longpolling
+        env:
+        - name: HOST
+          value: postgresql
+        - name: USER
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secrets
+              key: postgres-user
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secrets
+              key: postgres-password
+        - name: ADMIN_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: odoo-secrets
+              key: admin-password
+        volumeMounts:
+        - name: odoo-data
+          mountPath: /var/lib/odoo
+        - name: odoo-config
+          mountPath: /etc/odoo/odoo.conf
+          subPath: odoo.conf
+      volumes:
+      - name: odoo-data
+        emptyDir: {}
+      - name: odoo-config
+        configMap:
+          name: odoo-config

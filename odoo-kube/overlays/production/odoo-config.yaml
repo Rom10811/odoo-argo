@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+spec:
+  template:
+    spec:
+      containers:
+      - name: odoo
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2000m"
+            memory: "4Gi"
+        env:
+        - name: WORKERS
+          value: "4"
+        - name: MAX_CRON_THREADS
+          value: "2"
+        - name: DB_MAXCONN
+          value: "64"
+        - name: LIMIT_MEMORY_SOFT
+          value: "2147483648"
+        - name: LIMIT_MEMORY_HARD
+          value: "2684354560"
+        - name: LIMIT_TIME_CPU
+          value: "600"
+        - name: LIMIT_TIME_REAL
+          value: "1200"
+        - name: LIMIT_REQUEST
+          value: "8192"
+        - name: WORKER_MEMORY_SOFT_LIMIT
+          value: "2147483648"
+        - name: WORKER_MEMORY_HARD_LIMIT
+          value: "2684354560"
+        livenessProbe:
+          httpGet:
+            path: /web/health
+            port: http
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /web/health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3

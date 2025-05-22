@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+
+nameSuffix: -prod
+
+# Configuration spécifique à la production
+patches:
+  - path: odoo-config.yaml
+    target:
+      kind: Deployment
+      name: odoo
+
+# Configuration des ressources
+resources:
+  - ../../base
+
+# Variables d'environnement
+configMapGenerator:
+  - name: odoo-config
+    behavior: merge
+    literals:
+      - DEBUG=False
+      - WORKERS=4
+
+secretGenerator:
+  - name: odoo-secrets
+    behavior: merge
+    literals:
+      - ADMIN_PASSWORD=your-secure-admin-password
+
+# Configuration Ingress (à décommenter et configurer selon vos besoins)
+# - ingress.yaml
