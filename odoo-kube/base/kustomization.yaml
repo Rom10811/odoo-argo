@@ -9,6 +9,7 @@ resources:
   - odoo/deployment.yaml
   - odoo/service.yaml
   - odoo/configmap.yaml
+  - networking/ingress.yaml
 
 commonLabels:
   app: odoo
