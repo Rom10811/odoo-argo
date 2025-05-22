@@ -7,7 +7,7 @@ resources:
   - cluster-issuer.yaml
 
 # Configuration commune pour Cert-Manager
-commonLabels:
+labels:
   app.kubernetes.io/name: cert-manager
   app.kubernetes.io/instance: cert-manager
   app.kubernetes.io/component: cert-manager
