@@ -92,6 +92,7 @@ data:
     limit_memory_soft = 629145600
     limit_time_cpu = 600
     limit_time_real = 1200
+    longpolling_port = 8072
 ---
 # odoo/deployment.yaml
 apiVersion: apps/v1
@@ -114,6 +115,9 @@ spec:
         image: odoo:16.0
         ports:
         - containerPort: 8069
+          name: web
+        - containerPort: 8072
+          name: longpolling
         env:
         - name: HOST
           value: postgres
@@ -139,17 +143,20 @@ spec:
             cpu: "1000m"
         readinessProbe:
           httpGet:
-            path: /web/database/selector
+            path: /web/webclient/version_info
             port: 8069
-          initialDelaySeconds: 30
+          initialDelaySeconds: 45
           periodSeconds: 10
           timeoutSeconds: 5
+          failureThreshold: 6
         livenessProbe:
           httpGet:
-            path: /web/database/selector
+            path: /web/webclient/version_info
             port: 8069
-          initialDelaySeconds: 60
+          initialDelaySeconds: 90
           periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 6
       volumes:
       - name: odoo-data
         persistentVolumeClaim:
@@ -169,6 +176,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/websocket-services: "odoo"
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     kubernetes.io/ingress.class: "nginx"
 spec:
