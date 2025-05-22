@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
+  - cert-manager
   - postgresql/statefulset.yaml
   - postgresql/service.yaml
   - postgresql/secret.yaml
