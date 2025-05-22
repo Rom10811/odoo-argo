@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: odoo-config
+  namespace: odoo
+data:
+  odoo.conf: |
+    [options]
+    ; Configuration de base
+    admin_passwd = odoo
+    db_host = postgresql
+    db_port = 5432
+    db_user = odoo
+    db_password = odoo
+    db_name = odoo
+    
+    ; Paramètres HTTP
+    http_port = 8069
+    longpolling_port = 8072
+    proxy_mode = True
+    x_sendfile = True
+    
+    ; Paramètres de performance
+    workers = 4
+    max_cron_threads = 1
+    limit_memory_soft = 2147483648
+    limit_memory_hard = 2684354560
+    
+    ; Paramètres d'email
+    email_from = odoo@duciel.cloud
+    smtp_server = smtp
+    smtp_port = 25
+    smtp_ssl = False
+    smtp_user = False
+    smtp_password = False
+    
+    ; Paramètres de débogage
+    log_level = info
+    logfile = /var/log/odoo/odoo-server.log

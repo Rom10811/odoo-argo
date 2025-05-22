@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: odoo-ingress
+  namespace: odoo
   annotations:
     # Configuration Nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -15,7 +16,6 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-buffering: "on"
     # Configuration Cert-Manager
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    acme.cert-manager.io/http01-edit-in-place: "true"
     # Headers
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header X-Forwarded-Proto $scheme;
